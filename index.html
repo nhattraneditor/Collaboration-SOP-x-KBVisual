@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Production Workflow | KBVisual</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #64748b;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --drive-color: #1ea362;
+            --lark-color: #3370ff;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --vip-color: #f59e0b; /* Màu vàng cam cho dịch vụ VIP */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Header Hero Section */
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: -40px auto 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Card Styling */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+        }
+
+        .section-icon {
+            font-size: 1.8rem;
+            margin-right: 15px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            margin: 25px 0 10px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        /* Folder Tree Visualization */
+        .folder-structure {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            border-left: 4px solid var(--drive-color);
+        }
+
+        .tree-item {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .indent-1 { margin-left: 20px; }
+        .indent-2 { margin-left: 40px; }
+        .indent-3 { margin-left: 60px; color: var(--text-muted); font-style: italic;}
+
+        /* Buttons */
+        .btn-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-drive {
+            background-color: var(--drive-color);
+        }
+
+        .btn-lark {
+            background-color: var(--lark-color);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid #e2e8f0;
+            color: var(--text-main);
+        }
+        .btn-outline:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Status Badges */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .status-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        .badge-pending { background: #e2e8f0; color: #475569; }
+        .badge-cooking { background: #fef3c7; color: #d97706; }
+        .badge-revise { background: #dbeafe; color: #2563eb; }
+        .badge-ready { background: #dcfce7; color: #16a34a; }
+        .badge-uploaded { background: #f3e8ff; color: #9333ea; }
+
+        /* Detail Box for New Features */
+        .detail-box {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .detail-box strong {
+            color: #0369a1;
+        }
+        .detail-list {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        .detail-list li {
+            margin-bottom: 8px;
+        }
+
+        .frame-io-box {
+            background: #111;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .frame-io-box a {
+            color: #a78bfa;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        /* VIP Section Styles */
+        .vip-rule {
+            background: #fffbeb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px dashed var(--vip-color);
+            color: #92400e;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8rem; }
+            .container { margin-top: -20px; }
+            .btn { width: 100%; justify-content: center; }
+            .frame-io-box { flex-direction: column; text-align: center; gap: 10px;}
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Collaboration SOP x KBVisual</h1>
+        <p>A tailored guide to organizing assets and tracking video production progress.</p>
+    </header>
+
+    <div class="container">
+
+        <div class="card">
+            <div class="section-header">
+                <span class="section-icon">📂</span>
+                <div class="section-title" style="color: var(--drive-color);">Phase 1: Drive Organization</div>
+            </div>
+            <p>To ensure we never lose a file, we use a structured folder system. Please organize your assets as shown below before requesting an edit.</p>
+
+            <h3>1. The Folder Tree Structure</h3>
+            <div class="folder-structure">
+                <div class="tree-item">📁 <strong>KBVisual </strong> (Root)</div>
+                <div class="tree-item indent-1">└── 📁 <strong>Dec - 15th</strong> (Batch Folder)</div>
+                <div class="tree-item indent-2">├── 📄 <strong>KBVisual - 15th</strong> (Master Script Doc)</div>
+                <div class="tree-item indent-2">├── 📁 <strong>Script 1 - [Topic Name]</strong></div>
+                <div class="tree-item indent-3">└── 🎞️ Raw footage files inside...</div>
+                <div class="tree-item indent-2">└── 📁 <strong>Script 2 - [Topic Name]</strong></div>
+                <div class="tree-item indent-3">└── 🎞️ Raw footage files inside...</div>
+            </div>
+
+            <h3>2. Naming Convention</h3>
+            <p>Ensure the <strong>Footage Folder Name</strong> matches exactly with the <strong>Script Title</strong> in your Google Doc.</p>
+
+            <div class="btn-group">
+                <a href="https://drive.google.com/drive/folders/1UyfH_Lebz585-N3rVtWA9BXfw_uS1muy?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-drive">
+                    <span style="margin-right: 8px;">📂</span> Open Project Drive Folder
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-header">
+                <span class="section-icon">🚀</span>
+                <div class="section-title" style="color: var(--lark-color);">Phase 2: Project Tracker</div>
+            </div>
+            <p>Once assets are uploaded, we use <strong>Lark Base</strong> to track every single deadline.</p>
+
+            <h3>Key Columns Explanation</h3>
+            <ul style="list-style: none; padding-left: 0;">
+                <li style="margin-bottom: 10px;">🔹 <strong>Source / Script:</strong> Paste your links here.</li>
+                <li style="margin-bottom: 10px;">🔹 <strong>Format:</strong> Choose <i>Short</i> (Vertical) or <i>Long</i> (Horizontal).</li>
+            </ul>
+
+            <h3>📝 Adding Details & Comments</h3>
+            <p>To provide specific assets or chat about a video, you must <strong>Open the Record</strong> (Click the Expand button ⤢ next to the video title).</p>
+            
+            <div class="detail-box">
+                <p>Inside the expanded view, you will find these new important fields:</p>
+                <ul class="detail-list">
+                    <li>
+                        <strong>Resource usage suggestions:</strong><br>
+                        <span style="font-size: 0.9em; color: #555;">Paste links to specific B-roll, images, or branding guides you want me to use for this specific video.</span>
+                    </li>
+                    <li>
+                        <strong>Note:</strong><br>
+                        <span style="font-size: 0.9em; color: #555;">Add any special instructions or reminders here.</span>
+                    </li>
+                    <li>
+                        <strong>Comments (💬):</strong><br>
+                        <span style="font-size: 0.9em; color: #555;">Chat directly on the card! (Remember: You must <u>Open</u> the card to see and reply to comments).</span>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>Status Tags Meaning</h3>
+            <div class="status-grid">
+                <div class="status-item"><span class="badge badge-pending">Pending</span> Pending video / In Queue</div>
+                <div class="status-item"><span class="badge badge-cooking">Cooking</span> I am editing now 👨‍🍳</div>
+                <div class="status-item"><span class="badge badge-revise">Revise</span> Draft ready for review</div>
+                <div class="status-item"><span class="badge badge-ready">Ready to go</span> Final version done</div>
+                <div class="status-item"><span class="badge badge-uploaded">Uploaded</span> Posted online</div>
+            </div>
+
+            <h3>How to Review Drafts (Revise Column)</h3>
+            <p>I use <strong>Frame.io</strong> for reviews. It allows you to draw and comment directly on the video frame.</p>
+            
+            <div class="frame-io-box">
+                <div style="display: flex; align-items: center;">
+                    <span style="font-size: 1.5rem; margin-right: 10px;">🎬</span>
+                    <div>
+                        <strong>New to Frame.io?</strong><br>
+                        <span style="font-size: 0.9rem; opacity: 0.8;">Learn how to leave comments in 60 seconds.</span>
+                    </div>
+                </div>
+                <a href="https://www.youtube.com/watch?v=r2K4QpkWEpk" target="_blank">Watch Tutorial &rarr;</a>
+            </div>
+
+            <div class="btn-group">
+                <a href="https://jsgdpg55n9au.sg.larksuite.com/wiki/O7CPwWmEYix5jRk7Y3gl64wogde?from=from_copylink" target="_blank" class="btn btn-lark">
+                    <span style="margin-right: 8px;">📊</span> Go to Lark Base Tracker
+                </a>
+            </div>
+        </div>
+        
+        <div class="card" style="border-left: 4px solid var(--vip-color);">
+            <div class="section-header">
+                <span class="section-icon">☕</span>
+                <div class="section-title" style="color: var(--vip-color);">Busy? Let Me Handle It</div>
+            </div>
+            <p>If you don't have time to create folders and update Lark, I can sort everything for you. You just need to follow <strong>one simple rule</strong>:</p>
+            
+            <div class="vip-rule">
+                <strong>💡 The Naming Rule:</strong><br>
+                Please ensure your files are named using this structure: <strong>Script [Number] - [Topic Name]</strong><br>
+                <i>(e.g., "Script 1 - AI Marketing.doc" and "Script 1 - AI Marketing.mp4")</i><br>
+                <span style="font-size: 0.9em; opacity: 0.8; margin-top: 5px; display: block;">* I will categorize them by upload date for you.</span>
+            </div>
+
+            <p><strong>Steps:</strong></p>
+            <ol style="margin-left: 20px; margin-bottom: 15px;">
+                <li>Rename your files correctly.</li>
+                <li>Upload everything directly to the folder below.</li>
+                <li>Send me a quick message.</li>
+            </ol>
+            
+            <div class="btn-group">
+                <a href="https://drive.google.com/drive/folders/1_KqgXG6lsfIKkyb3zz6cD4AI55pTa8Us?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn" style="background-color: var(--vip-color);">
+                    <span style="margin-right: 8px;">☁️</span> Upload Files Here
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer style="text-align: center; color: var(--text-muted); padding: 20px; font-size: 0.9rem;">
+        <p>&copy; 2024 Video Production Workflow Guide</p>
+    </footer>
+
+</body>
+</html>
